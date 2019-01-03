@@ -1,0 +1,43 @@
+<%= form_tag home_add_player_path, :class => 'form-inline', :method => 'get', :remote => true do %>
+  <div class="cols-sm-12 mx-auto">
+    <%= hidden_field_tag :number_players, 0, :id => 'numberPlayersInput' %>                   
+    <%= submit_tag "Agregar jugador", :class => 'btn btn-primary', :id => 'numberPlayersButton' %> 
+  </div>    
+<% end %>                
+<div id="table"></div>
+<script>
+  $(document).ready(function(){
+    $('#numberPlayersButton').click(function() {
+      $('#numberPlayersInput').val(parseInt($('#numberPlayersInput').val())+1);
+    });
+    $(".inputBox").keypress(function(e) {
+      console.log("-----------")
+      var id = $(this).attr("id");
+      var keyCode = e.which;
+      if(keyCode == 45 || keyCode == 47 || (keyCode >= 49 && keyCode <= 57) || keyCode == 88 || keyCode == 120){
+        
+        //console.log($("#"+id).val());
+        //console.log(e.which);
+        var line = id.split('_')[1];
+        var frame = id.split('_')[2];
+        var box = id.split('_')[3];
+        dataLine = []
+        for(i = 1; i <= 10; i++){            
+          var boxOne = line+"_"+i+"_"+1;
+          var boxTwo = line+"_"+i+"_"+2;
+          info = {"boxOne":boxOne, "boxTwo":boxTwo};
+          //dataLine.push(dataLine);
+          //console.log(info)
+        }
+        //alert("line -> " +  line);
+        $.ajax({
+          url: '/home/add_score',
+          type: 'GET',
+          data: dataLine
+        });          
+      }else{
+        return false;
+      }
+    });    
+  });  
+</script>
