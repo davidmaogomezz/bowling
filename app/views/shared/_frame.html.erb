@@ -1,11 +1,16 @@
 <th scope="col" id="frame_<%=number%>">
   <div class="row">
-    <% 2.times do |time| %>
-      <div class="col-sm-6" id="box_<%= @number_players%>_<%=number%>_<%=time+1%>" >
+    <% if number < 10 %>
+      <% number_inputs = 2%>
+    <% else %>
+      <% number_inputs = 3%>
+    <% end %>
+    <% number_inputs.times do |time| %>
+      <div class="col-sm-4" id="box_<%= @number_players%>_<%=number%>_<%=time+1%>" >
         <%= form_tag home_add_score_path, :class => 'form-inline', :method => 'get', :remote => true do %>
           <div class="cols-sm-12 mx-auto">
             <%= hidden_field_tag :number_players, 0, :id => 'numberPlayersInput' %>                   
-            <%= text_field_tag "input_#{@number_players}_#{number}_#{time+1}", '', :class => "inputBox", :size => '2', :value => 0%> 
+            <%= text_field_tag "input_#{@number_players}_#{number}_#{time+1}", '', :class => "inputBox", :size => '2', :value => ""%> 
           </div>    
         <% end %>                
       </div>

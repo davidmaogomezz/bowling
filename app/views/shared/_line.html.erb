@@ -1,61 +1,81 @@
-<table class="table" border="1" id="player_<%=@number_players%>">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>        
-      <% 10.times do |time|%>
-        <%= render 'shared/number_frame', number: time+1 %>
-      <%end%>
-      <th>Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="col"></th>
-      <% 10.times do |time|%>
-        <%= render 'shared/frame', number: time+1 %>
-      <%end%>
-      <th>
-        <div class="row"></div>
-        <div class="row">
-          <div class="col-sm-4"></div>
-          <div class="col-sm-4">
-            <label for="" id="total_<%= @number_players%>">0</label>
-          </div>
-          <div class="col-sm-4"></div>          
-        </div>
-      </th>
-    </tr>
-  </tbody>
-  </table>
-  <script>
-      $(document).ready(function(){
-        $(".inputBox").keyup(function(e) {
-          var id = $(this).attr("id");
-          var keyCode = e.which;
-          if(keyCode == 45 || keyCode == 47 || (keyCode >= 49 && keyCode <= 57) || keyCode == 88 || keyCode == 120){            
-            var line = id.split('_')[1];
-            var frame = id.split('_')[2];
-            var box = id.split('_')[3];
-            dataLine = []
-            dataLine.push({line});
-            for(i = 1; i <= 10; i++){            
-              var boxOne = $("#input_"+line+"_"+i+"_"+1).val();
-              var boxTwo = $("#input_"+line+"_"+i+"_"+2).val();
-              var obj = {
-                boxOne,
-                boxTwo
-              };              
-              dataLine.push(obj);
-            }
-            console.log(dataLine);
-            $.ajax({
-              url: '/home/add_score',
-              type: 'GET',
-              data: {data: dataLine}
-            });          
-          }else{
-            return false;
-          }
-        });    
-      });  
-    </script>
+<div class="container">
+  <table class="table" border="1" id="player_<%=@number_players%>">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>        
+          <% 10.times do |time|%>
+            <%= render 'shared/number_frame', number: time+1 %>
+          <%end%>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="col"></th>
+          <% 10.times do |time|%>
+            <%= render 'shared/frame', number: time+1 %>
+          <%end%>
+          <th>
+            <div class="row"></div>
+            <div class="row">
+              <div class="col-sm-4"></div>
+              <div class="col-sm-4">
+                <label for="" id="total_<%= @number_players%>">0</label>
+              </div>
+              <div class="col-sm-4"></div>          
+            </div>
+          </th>
+        </tr>
+      </tbody>
+      </table>
+      <script>
+          $(document).ready(function(){
+            $(".inputBox").on("keyup",function(e) {
+              var id = $(this).attr("id");
+              var keyCode = e.which;          
+              if(keyCode == 8 || keyCode == 45 || keyCode == 47 || (keyCode >= 49 && keyCode <= 57) || keyCode == 88 || keyCode == 120){            
+                var line = id.split('_')[1];
+                var frame = id.split('_')[2];
+                var box = id.split('_')[3];
+                dataLine = []
+                dataLine.push({line});
+                for(i = 1; i <= 10; i++){            
+                  var boxOne = $("#input_"+line+"_"+i+"_"+1).val();
+                  var boxTwo = $("#input_"+line+"_"+i+"_"+2).val();
+                  if(boxOne == "/"){
+                    $("#input_"+line+"_"+i+"_"+1).val("");
+                    return false;
+                  }
+                  if(boxTwo == "X" || boxTwo == "x"){
+                    $("#input_"+line+"_"+i+"_"+2).val("");
+                    return false;
+                  }
+                  if((boxOne == "X" || boxOne == "x") && boxTwo != ""){
+                    $("#input_"+line+"_"+i+"_"+2).val("");
+                    return false;
+                  }  
+                  if(boxOne == ""){
+                    boxOne = 0;
+                  }
+                  if(boxTwo == ""){
+                    boxTwo = 0;
+                  }              
+                  var obj = {
+                    boxOne,
+                    boxTwo
+                  };              
+                  dataLine.push(obj);
+                }
+                console.log(dataLine);
+                $.ajax({
+                  url: '/home/add_score',
+                  type: 'GET',
+                  data: {data: dataLine}
+                });          
+              }else{
+                return false;
+              }
+            });    
+          });  
+        </script>
+</div>

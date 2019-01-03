@@ -1,0 +1,4 @@
+<%10.times do |time|%>
+  $("#result_frame"+<%=@line%>+"_"+<%=time+1%>).text(<%=@data["#{time+1}"]["result"]%>)
+<%end%>
+$("#total_"+<%=@line%>).text(<%=@data["score"]%>)
